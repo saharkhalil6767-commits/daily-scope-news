@@ -270,44 +270,6 @@
     videosGrid.dataset.loaded = 'true';
   }
 
-    ];
-
-    videosGrid.innerHTML = publishers.map((publisher) => {
-      const searchUrl =
-        `https://www.youtube.com/results?search_query=${
-          encodeURIComponent(publisher.name + ' ' + safeTopic + ' news')
-        }`;
-
-      return `
-        <article class="video-card">
-          <a class="video-thumbnail"
-             href="${searchUrl}"
-             target="_blank"
-             rel="noopener noreferrer"
-             aria-label="Search ${escapeHTML(publisher.name)} videos">
-            <span class="play-icon" aria-hidden="true">▶</span>
-          </a>
-          <div class="video-info">
-            <h3>${escapeHTML(publisher.name)}</h3>
-            <p>${escapeHTML(publisher.description)}</p>
-            <a class="video-link"
-               href="${searchUrl}"
-               target="_blank"
-               rel="noopener noreferrer">
-              Find ${escapeHTML(safeTopic)} videos ↗
-            </a>
-            <p>
-              <a class="video-link"
-                 href="${publisher.url}"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                Visit official channel
-              </a>
-            </p>
-          </div>
-        </article>`;
-    }).join('');
-
-    videosGrid.dataset.loaded = 'true';
+  
   }
 })();
