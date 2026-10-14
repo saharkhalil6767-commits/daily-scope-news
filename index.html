@@ -41,6 +41,22 @@
     </section>
 
     <div id="status" class="status" role="status" aria-live="polite">Enter a city to load today’s stories.</div>
+   <nav class="content-tabs" aria-label="Choose content">
+  <button id="postsTab" class="content-tab active" type="button">
+    📰 News Posts
+  </button>
+  <button id="videosTab" class="content-tab" type="button">
+    ▶ News Videos
+  </button>
+</nav>
+
+<section id="videosSection" hidden aria-label="News videos">
+  <div class="video-intro">
+    <h2>Watch the Latest News</h2>
+    <p>Explore news videos from video publishers.</p>
+  </div>
+  <div id="videosGrid" class="videos-grid"></div>
+</section>
     <section id="newsGrid" class="news-grid" aria-label="News articles">
       <div class="empty-state">
         <div class="empty-icon" aria-hidden="true">◎</div>
