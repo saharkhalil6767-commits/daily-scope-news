@@ -213,6 +213,11 @@
         name: 'Associated Press',
         description: 'News footage and reports from around the world.',
         url: 'https://www.youtube.com/@AssociatedPress'
+        ,
+      {name:'ARY News',description:'Pakistan ki latest Urdu news aur video reports.',url:'https://www.youtube.com/@ARYNews'},
+      {name:'Geo News',description:'Pakistan aur duniya bhar ki Urdu news coverage.',url:'https://www.youtube.com/@geonews'},
+      {name:'UrduPoint',description:'Urdu news, interviews aur video reports.',url:'https://www.youtube.com/@UrduPoint'}
+
       }
     ];
 
