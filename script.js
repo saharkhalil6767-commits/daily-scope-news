@@ -61,7 +61,7 @@
     searchBtn.disabled = true;
     showEmpty('Finding your daily briefing', 'Please wait while we fetch the latest articles.');
     try {
-      const response = await fetch(`/.netlify/functions/news?city=${encodeURIComponent(city)}`);
+      const response = await fetch(`/api/news?city=${encodeURIComponent(city)}`);
       const data = await response.json();
       if (!response.ok || data.error) throw new Error(data.error || `Request failed (${response.status}).`);
       const articles = (data.articles || []).filter(a => a.title && a.title !== '[Removed]');
