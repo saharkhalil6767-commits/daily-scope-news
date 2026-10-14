@@ -186,6 +186,8 @@
   }
 
   function renderVideoCards(topic) {
+    
+  function renderVideoCards(topic) {
     const safeTopic = topic.trim() || 'world';
 
     const publishers = [
@@ -213,12 +215,6 @@
         name: 'Associated Press',
         description: 'News footage and reports from around the world.',
         url: 'https://www.youtube.com/@AssociatedPress'
-        ,
-     
-      {
-        name: 'Associated Press',
-        description: 'News footage and reports from around the world.',
-        url: 'https://www.youtube.com/@AssociatedPress'
       },
       {
         name: 'ARY News',
@@ -237,7 +233,43 @@
       }
     ];
 
-      }
+    videosGrid.innerHTML = publishers.map((publisher) => {
+      const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(publisher.name + ' ' + safeTopic + ' news')}`;
+
+      return `
+        <article class="video-card">
+          <a class="video-thumbnail"
+             href="${searchUrl}"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="Search ${publisher.name} videos">
+            <span class="play-icon" aria-hidden="true">▶</span>
+          </a>
+          <div class="video-info">
+            <h3>${publisher.name}</h3>
+            <p>${publisher.description}</p>
+            <a class="video-link"
+               href="${searchUrl}"
+               target="_blank"
+               rel="noopener noreferrer">
+              Find ${safeTopic} videos ↗
+            </a>
+            <p>
+              <a class="video-link"
+                 href="${publisher.url}"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                Visit official channel
+              </a>
+            </p>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    videosGrid.dataset.loaded = 'true';
+  }
+
     ];
 
     videosGrid.innerHTML = publishers.map((publisher) => {
