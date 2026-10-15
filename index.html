@@ -1,72 +1,172 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101d49">
-  <title>DailyScope — Local News</title>
+
+  <title>DailyScope — Latest News & Videos</title>
+
+  <meta name="description" content="DailyScope brings you the latest local news, breaking stories and news videos. Your city. Your news.">
+
+  <!-- Website browser tab logo -->
+  <link rel="icon" type="image/png" href="/dailyscope-logo.png">
+
+  <!-- WhatsApp and Facebook sharing preview -->
+  <meta property="og:title" content="DailyScope — Latest News & Videos">
+  <meta property="og:description" content="Your city. Your news. Stay informed with DailyScope.">
+  <meta property="og:image" content="https://aidailyscopenews.netlify.app/dailyscope-logo.png">
+  <meta property="og:url" content="https://aidailyscopenews.netlify.app/">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter/X sharing preview -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DailyScope — Latest News & Videos">
+  <meta name="twitter:description" content="Your city. Your news. Stay informed with DailyScope.">
+  <meta name="twitter:image" content="https://aidailyscopenews.netlify.app/dailyscope-logo.png">
+
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
+
 <body>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="#" aria-label="DailyScope home"><span class="brand-mark">D</span> Daily<span>Scope</span></a>
+
+      <!-- DailyScope logo -->
+      <a class="brand" href="/" aria-label="DailyScope home">
+        <img
+          src="/dailyscope-logo.png"
+          alt="DailyScope News logo"
+          class="brand-logo"
+        >
+        <span class="brand-name">Daily<span>Scope</span></span>
+      </a>
+
       <span class="header-note">YOUR CITY. YOUR NEWS.</span>
     </div>
+
     <div class="hero">
       <p class="eyebrow">THE NEWS THAT MATTERS TO YOU</p>
+
       <h1>See what’s happening <span>around you.</span></h1>
-      <p class="hero-copy">Enter a city to explore the latest stories making headlines today.</p>
+
+      <p class="hero-copy">
+        Enter a city to explore the latest stories making headlines today.
+      </p>
     </div>
   </header>
 
   <main class="container">
+
+    <!-- Search news -->
     <section class="search-panel" aria-label="Search news">
       <label for="location">Location or city</label>
+
       <div class="search-row">
-        <input id="location" type="text" value="London" placeholder="Try London, Islamabad, Karachi…" autocomplete="address-level2">
-        <button id="searchBtn" type="button">Find today’s news <span aria-hidden="true">→</span></button>
+        <input
+          id="location"
+          type="text"
+          value="London"
+          placeholder="Try London, Islamabad, Karachi…"
+          autocomplete="address-level2"
+        >
+
+        <button id="searchBtn" type="button">
+          Find today’s news
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
-      <p class="small-note">News is fetched securely through the website backend. The API key is stored in the hosting environment, not in this page.</p>
+
+      <p class="small-note">
+        News is fetched securely through the website backend.
+        The API key is stored in the hosting environment, not in this page.
+      </p>
     </section>
 
+    <!-- News heading -->
     <section class="results-heading">
       <div>
         <p class="eyebrow blue">DAILY BRIEFING</p>
         <h2 id="resultsTitle">Today in London</h2>
         <p id="todayDate" class="muted"></p>
       </div>
-      <span id="resultCount" class="count-pill">Ready to search</span>
+
+      <span id="resultCount" class="count-pill">
+        Ready to search
+      </span>
     </section>
 
-    <div id="status" class="status" role="status" aria-live="polite">Enter a city to load today’s stories.</div>
-   <nav class="content-tabs" aria-label="Choose content">
-  <button id="postsTab" class="content-tab active" type="button">
-    📰 News Posts
-  </button>
-  <button id="videosTab" class="content-tab" type="button">
-    ▶ News Videos
-  </button>
-</nav>
+    <div id="status" class="status" role="status" aria-live="polite">
+      Enter a city to load today’s stories.
+    </div>
 
-<section id="videosSection" hidden aria-label="News videos">
-  <div class="video-intro">
-    <h2>Watch the Latest News</h2>
-    <p>Explore news videos from video publishers.</p>
-  </div>
-  <div id="videosGrid" class="videos-grid"></div>
-</section>
-    <section id="newsGrid" class="news-grid" aria-label="News articles">
+    <!-- News and video tabs -->
+    <nav class="content-tabs" aria-label="Choose content">
+      <button
+        id="postsTab"
+        class="content-tab active"
+        type="button"
+      >
+        📰 News Posts
+      </button>
+
+      <button
+        id="videosTab"
+        class="content-tab"
+        type="button"
+      >
+        ▶ News Videos
+      </button>
+    </nav>
+
+    <!-- News videos -->
+    <section id="videosSection" hidden aria-label="News videos">
+      <div class="video-intro">
+        <h2>Watch the Latest News</h2>
+        <p>Explore news videos from video publishers.</p>
+      </div>
+
+      <div id="videosGrid" class="videos-grid"></div>
+    </section>
+
+    <!-- News articles -->
+    <section
+      id="newsGrid"
+      class="news-grid"
+      aria-label="News articles"
+    >
       <div class="empty-state">
         <div class="empty-icon" aria-hidden="true">◎</div>
         <h3>Your daily news starts here</h3>
         <p>Enter a city to load today’s stories.</p>
       </div>
     </section>
-    <p class="disclaimer">News provided by NewsAPI.org. Articles and images belong to their respective publishers. Search results depend on the sources and coverage available through your NewsAPI plan.</p>
+
+    <p class="disclaimer">
+      News provided by NewsAPI.org. Articles and images belong to their
+      respective publishers. Search results depend on the sources and
+      coverage available through your NewsAPI plan.
+    </p>
   </main>
 
-  <footer><div class="footer-inner"><span class="brand small-brand"><span class="brand-mark">D</span> Daily<span>Scope</span></span><span>Stay informed. Stay curious.</span></div></footer>
+  <!-- Website footer -->
+  <footer>
+    <div class="footer-inner">
+
+      <a class="brand small-brand" href="/" aria-label="DailyScope home">
+        <img
+          src="/dailyscope-logo.png"
+          alt=""
+          class="brand-logo"
+        >
+        <span class="brand-name">Daily<span>Scope</span></span>
+      </a>
+
+      <span>Stay informed. Stay curious.</span>
+    </div>
+  </footer>
 </body>
 </html>
+```
