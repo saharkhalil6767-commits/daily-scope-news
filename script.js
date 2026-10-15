@@ -269,7 +269,72 @@
 
     videosGrid.dataset.loaded = 'true';
   }
+```js
+  function renderVideoCards(topic) {
+    const channels = [
+      {
+        name: 'ARY News',
+        language: 'Urdu',
+        description: 'Pakistan ki latest Urdu news',
+        url: 'https://www.youtube.com/@ARYNews'
+      },
+      {
+        name: 'Geo News',
+        language: 'Urdu',
+        description: 'Pakistan aur duniya bhar ki khabrein',
+        url: 'https://www.youtube.com/@geonews'
+      },
+      {
+        name: 'UrduPoint',
+        language: 'Urdu',
+        description: 'Urdu news aur interviews',
+        url: 'https://www.youtube.com/@UrduPoint'
+      },
+      {
+        name: 'BBC News',
+        language: 'English',
+        description: 'International news coverage',
+        url: 'https://www.youtube.com/@BBCNews'
+      },
+      {
+        name: 'Al Jazeera English',
+        language: 'English',
+        description: 'Global news and reports',
+        url: 'https://www.youtube.com/@aljazeeraenglish'
+      },
+      {
+        name: 'Sky News',
+        language: 'English',
+        description: 'Breaking news and updates',
+        url: 'https://www.youtube.com/@SkyNews'
+      },
+      {
+        name: 'DW News',
+        language: 'English',
+        description: 'World news and analysis',
+        url: 'https://www.youtube.com/@dwnews'
+      }
+    ];
 
+    videosGrid.innerHTML = channels.map(channel => `
+      <article class="video-card">
+        <div class="video-info">
+          <h3>${escapeHTML(channel.name)}</h3>
+          <p>${escapeHTML(channel.language)} News</p>
+          <p>${escapeHTML(channel.description)}</p>
+          <a class="video-link"
+             href="${channel.url}"
+             target="_blank"
+             rel="noopener noreferrer">
+            Visit Channel ↗
+          </a>
+        </div>
+      </article>
+    `).join('');
+
+    videosGrid.dataset.loaded = 'true';
+  }
+```
   
   }
 })();
