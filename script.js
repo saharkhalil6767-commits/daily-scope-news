@@ -1,11 +1,7 @@
-```javascript
 (() => {
   'use strict';
 
-  // ==========================================
   // 1. GET HTML ELEMENTS
-  // ==========================================
-
   const $ = (id) => document.getElementById(id);
 
   const locationInput = $('location');
@@ -21,7 +17,7 @@
   const videosSection = $('videosSection');
   const videosGrid = $('videosGrid');
 
-  // Check that required HTML elements exist
+  // 2. CHECK REQUIRED ELEMENTS
   const requiredElements = [
     locationInput,
     searchBtn,
@@ -38,27 +34,23 @@
 
   if (requiredElements.some((element) => !element)) {
     console.error(
-      'DailyScope: One or more required HTML elements are missing. ' +
-      'Check the element IDs in index.html.'
+      'DailyScope: Check the required element IDs in index.html.'
     );
     return;
   }
 
-  // ==========================================
-  // 2. TODAY'S DATE
-  // ==========================================
+  // 3. DISPLAY TODAY'S DATE
+  todayDate.textContent = new Date().toLocaleDateString(
+    undefined,
+    {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+  );
 
-  todayDate.textContent = new Date().toLocaleDateString(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // ==========================================
-  // 3. NEWS CHANNELS
-  // ==========================================
-
+  // 4. NEWS CHANNELS
   const channels = [
     {
       name: 'ARY News',
@@ -104,28 +96,23 @@
     }
   ];
 
-  // ==========================================
-  // 4. ESCAPE HTML TEXT
-  // ==========================================
+  // 5. ESCAPE HTML
+  function escapeHTML(value) {
+    const entities = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
 
-  function escapeHTML(value = '') {
-    return String(value).replace(/[&<>"']/g, (character) => {
-      const entities = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      };
-
-      return entities[character];
-    });
+    return String(value ?? '').replace(
+      /[&<>"']/g,
+      (character) => entities[character]
+    );
   }
 
-  // ==========================================
-  // 5. FORMAT ARTICLE DATE
-  // ==========================================
-
+  // 6. FORMAT DATE
   function formatDate(value) {
     if (!value) {
       return 'Date unavailable';
@@ -143,10 +130,7 @@
     });
   }
 
-  // ==========================================
-  // 6. SHOW EMPTY NEWS MESSAGE
-  // ==========================================
-
+  // 7. SHOW EMPTY STATE
   function showEmpty(title, message) {
     newsGrid.innerHTML = `
       <div class="empty-state">
@@ -157,10 +141,7 @@
     `;
   }
 
-  // ==========================================
-  // 7. DISPLAY NEWS ARTICLES
-  // ==========================================
-
+  // 8. DISPLAY NEWS ARTICLES
   function renderArticles(articles) {
     if (!articles.length) {
       showEmpty(
@@ -218,9 +199,7 @@
             </div>
 
             <h3>${escapeHTML(title)}</h3>
-
             <p>${escapeHTML(description)}</p>
-
             ${articleLink}
           </div>
         </article>
@@ -228,43 +207,32 @@
     }).join('');
   }
 
-  // ==========================================
-  // 8. DISPLAY NEWS CHANNEL CARDS
-  // ==========================================
-
+  // 9. DISPLAY NEWS CHANNELS
   function renderVideoCards() {
-    videosGrid.innerHTML = channels.map((channel) => {
-      return `
-        <article class="video-card">
-          <div class="video-info">
-            <h3>${escapeHTML(channel.name)}</h3>
-
-            <p class="channel-language">
-              ${escapeHTML(channel.language)} News
-            </p>
-
-            <p>${escapeHTML(channel.description)}</p>
-
-            <a
-              class="video-link"
-              href="${escapeHTML(channel.url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Visit Channel ↗
-            </a>
-          </div>
-        </article>
-      `;
-    }).join('');
+    videosGrid.innerHTML = channels.map((channel) => `
+      <article class="video-card">
+        <div class="video-info">
+          <h3>${escapeHTML(channel.name)}</h3>
+          <p class="channel-language">
+            ${escapeHTML(channel.language)} News
+          </p>
+          <p>${escapeHTML(channel.description)}</p>
+          <a
+            class="video-link"
+            href="${escapeHTML(channel.url)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Watch News ↗
+          </a>
+        </div>
+      </article>
+    `).join('');
 
     videosGrid.dataset.loaded = 'true';
   }
 
-  // ==========================================
-  // 9. SWITCH BETWEEN TABS
-  // ==========================================
-
+  // 10. SWITCH TABS
   function showTab(tab) {
     const showPosts = tab === 'posts';
 
@@ -274,48 +242,29 @@
     postsTab.classList.toggle('active', showPosts);
     videosTab.classList.toggle('active', !showPosts);
 
-    postsTab.setAttribute(
-      'aria-pressed',
-      String(showPosts)
-    );
+    postsTab.setAttribute('aria-pressed', String(showPosts));
+    videosTab.setAttribute('aria-pressed', String(!showPosts));
 
-    videosTab.setAttribute(
-      'aria-pressed',
-      String(!showPosts)
-    );
-
-    if (
-      !showPosts &&
-      videosGrid.dataset.loaded !== 'true'
-    ) {
+    if (!showPosts && videosGrid.dataset.loaded !== 'true') {
       renderVideoCards();
     }
   }
 
-  // ==========================================
-  // 10. LOAD NEWS FROM BACKEND
-  // ==========================================
-
+  // 11. LOAD NEWS FROM BACKEND
   async function loadNews() {
     const city = locationInput.value.trim();
 
     if (!city) {
-      statusEl.textContent =
-        'Please enter a city or location.';
-
+      statusEl.textContent = 'Please enter a city or location.';
       locationInput.focus();
       return;
     }
 
     resultsTitle.textContent = `Today in ${city}`;
-
-    statusEl.textContent =
-      `Searching for news about ${city}...`;
-
+    statusEl.textContent = `Searching for news about ${city}...`;
     resultCount.textContent = 'Loading...';
     searchBtn.disabled = true;
 
-    // Show the news tab while loading results
     showTab('posts');
 
     showEmpty(
@@ -333,26 +282,21 @@
       try {
         data = await response.json();
       } catch {
-        throw new Error(
-          'The server returned an invalid response.'
-        );
+        throw new Error('The server returned an invalid response.');
       }
 
       if (!response.ok || data.error) {
         throw new Error(
-          data.error ||
-          `News request failed (${response.status}).`
+          data.error || `News request failed (${response.status}).`
         );
       }
 
       const articles = Array.isArray(data.articles)
-        ? data.articles.filter((article) => {
-            return (
-              article &&
-              article.title &&
-              article.title !== '[Removed]'
-            );
-          })
+        ? data.articles.filter((article) => (
+            article &&
+            article.title &&
+            article.title !== '[Removed]'
+          ))
         : [];
 
       renderArticles(articles);
@@ -362,41 +306,28 @@
           articles.length === 1 ? 'story' : 'stories'
         }`;
 
-      if (articles.length > 0) {
-        statusEl.textContent =
-          `Showing news articles for ${city}.`;
-      } else {
-        statusEl.textContent =
-          `No articles found for ${city}. Try another location.`;
-      }
+      statusEl.textContent = articles.length
+        ? `Showing news articles for ${city}.`
+        : `No articles found for ${city}. Try another location.`;
 
     } catch (error) {
-      console.error(
-        'DailyScope news error:',
-        error
-      );
+      console.error('DailyScope news error:', error);
 
       showEmpty(
         'Could not load news',
         error.message ||
-        'Please check your internet connection and backend.'
+          'Please check your internet connection and backend.'
       );
 
-      statusEl.textContent =
-        'News request failed.';
-
-      resultCount.textContent =
-        'Unavailable';
+      statusEl.textContent = 'News request failed.';
+      resultCount.textContent = 'Unavailable';
 
     } finally {
       searchBtn.disabled = false;
     }
   }
 
-  // ==========================================
-  // 11. BUTTON EVENTS
-  // ==========================================
-
+  // 12. BUTTON EVENTS
   searchBtn.addEventListener('click', loadNews);
 
   locationInput.addEventListener('keydown', (event) => {
@@ -413,13 +344,9 @@
     showTab('videos');
   });
 
-  // ==========================================
-  // 12. INITIAL PAGE SETUP
-  // ==========================================
-
+  // 13. INITIAL SETUP
   showTab('posts');
 
   console.log('DailyScope JavaScript loaded successfully.');
 
 })();
-```
