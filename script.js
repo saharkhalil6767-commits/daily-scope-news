@@ -2,9 +2,12 @@
 (() => {
   'use strict';
 
+  // ==========================================
+  // 1. GET HTML ELEMENTS
+  // ==========================================
+
   const $ = (id) => document.getElementById(id);
 
-  // HTML elements
   const locationInput = $('location');
   const searchBtn = $('searchBtn');
   const newsGrid = $('newsGrid');
@@ -18,8 +21,8 @@
   const videosSection = $('videosSection');
   const videosGrid = $('videosGrid');
 
-  // Check required HTML elements
-  const requiredElements = {
+  // Check that required HTML elements exist
+  const requiredElements = [
     locationInput,
     searchBtn,
     newsGrid,
@@ -31,21 +34,20 @@
     videosTab,
     videosSection,
     videosGrid
-  };
+  ];
 
-  const missingElements = Object.entries(requiredElements)
-    .filter(([, element]) => !element)
-    .map(([name]) => name);
-
-  if (missingElements.length) {
+  if (requiredElements.some((element) => !element)) {
     console.error(
-      'DailyScope: Missing HTML elements:',
-      missingElements.join(', ')
+      'DailyScope: One or more required HTML elements are missing. ' +
+      'Check the element IDs in index.html.'
     );
     return;
   }
 
-  // Show today's date
+  // ==========================================
+  // 2. TODAY'S DATE
+  // ==========================================
+
   todayDate.textContent = new Date().toLocaleDateString(undefined, {
     weekday: 'long',
     year: 'numeric',
@@ -53,7 +55,10 @@
     day: 'numeric'
   });
 
-  // News channel information
+  // ==========================================
+  // 3. NEWS CHANNELS
+  // ==========================================
+
   const channels = [
     {
       name: 'ARY News',
@@ -99,20 +104,32 @@
     }
   ];
 
-  // Safely display text in HTML
+  // ==========================================
+  // 4. ESCAPE HTML TEXT
+  // ==========================================
+
   function escapeHTML(value = '') {
-    return String(value).replace(/[&<>"']/g, (character) => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[character]));
+    return String(value).replace(/[&<>"']/g, (character) => {
+      const entities = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+
+      return entities[character];
+    });
   }
 
-  // Format article publication date
+  // ==========================================
+  // 5. FORMAT ARTICLE DATE
+  // ==========================================
+
   function formatDate(value) {
-    if (!value) return 'Date unavailable';
+    if (!value) {
+      return 'Date unavailable';
+    }
 
     const date = new Date(value);
 
@@ -126,7 +143,10 @@
     });
   }
 
-  // Show an empty or informational news state
+  // ==========================================
+  // 6. SHOW EMPTY NEWS MESSAGE
+  // ==========================================
+
   function showEmpty(title, message) {
     newsGrid.innerHTML = `
       <div class="empty-state">
@@ -137,7 +157,10 @@
     `;
   }
 
-  // Display news articles
+  // ==========================================
+  // 7. DISPLAY NEWS ARTICLES
+  // ==========================================
+
   function renderArticles(articles) {
     if (!articles.length) {
       showEmpty(
@@ -149,11 +172,13 @@
 
     newsGrid.innerHTML = articles.map((article) => {
       const title = article.title || 'Untitled article';
+
       const description = article.description ||
         'Open the publisher website to read the full story.';
+
       const source = article.source?.name || 'News source';
       const url = article.url || '';
-      const image = article.urlToImage;
+      const image = article.urlToImage || '';
 
       const imageMarkup = image
         ? `
@@ -161,10 +186,10 @@
             src="${escapeHTML(image)}"
             alt=""
             loading="lazy"
-            onerror="this.style.display='none'; this.parentElement.textContent='Image unavailable';"
+            onerror="this.style.display='none';"
           >
         `
-        : 'No image available';
+        : '<div class="no-image">No image available</div>';
 
       const articleLink = url
         ? `
@@ -181,14 +206,21 @@
 
       return `
         <article class="news-card">
-          <div class="news-image">${imageMarkup}</div>
+          <div class="news-image">
+            ${imageMarkup}
+          </div>
+
           <div class="news-body">
             <div class="article-meta">
-              ${escapeHTML(source)} ·
+              ${escapeHTML(source)}
+              ·
               ${escapeHTML(formatDate(article.publishedAt))}
             </div>
+
             <h3>${escapeHTML(title)}</h3>
+
             <p>${escapeHTML(description)}</p>
+
             ${articleLink}
           </div>
         </article>
@@ -196,30 +228,43 @@
     }).join('');
   }
 
-  // Display news channel cards only
+  // ==========================================
+  // 8. DISPLAY NEWS CHANNEL CARDS
+  // ==========================================
+
   function renderVideoCards() {
-    videosGrid.innerHTML = channels.map((channel) => `
-      <article class="video-card">
-        <div class="video-info">
-          <h3>${escapeHTML(channel.name)}</h3>
-          <p>${escapeHTML(channel.language)} News</p>
-          <p>${escapeHTML(channel.description)}</p>
-          <a
-            class="video-link"
-            href="${escapeHTML(channel.url)}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Visit Channel ↗
-          </a>
-        </div>
-      </article>
-    `).join('');
+    videosGrid.innerHTML = channels.map((channel) => {
+      return `
+        <article class="video-card">
+          <div class="video-info">
+            <h3>${escapeHTML(channel.name)}</h3>
+
+            <p class="channel-language">
+              ${escapeHTML(channel.language)} News
+            </p>
+
+            <p>${escapeHTML(channel.description)}</p>
+
+            <a
+              class="video-link"
+              href="${escapeHTML(channel.url)}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit Channel ↗
+            </a>
+          </div>
+        </article>
+      `;
+    }).join('');
 
     videosGrid.dataset.loaded = 'true';
   }
 
-  // Switch between News Posts and News Videos
+  // ==========================================
+  // 9. SWITCH BETWEEN TABS
+  // ==========================================
+
   function showTab(tab) {
     const showPosts = tab === 'posts';
 
@@ -229,28 +274,49 @@
     postsTab.classList.toggle('active', showPosts);
     videosTab.classList.toggle('active', !showPosts);
 
-    postsTab.setAttribute('aria-pressed', String(showPosts));
-    videosTab.setAttribute('aria-pressed', String(!showPosts));
+    postsTab.setAttribute(
+      'aria-pressed',
+      String(showPosts)
+    );
 
-    if (!showPosts && videosGrid.dataset.loaded !== 'true') {
+    videosTab.setAttribute(
+      'aria-pressed',
+      String(!showPosts)
+    );
+
+    if (
+      !showPosts &&
+      videosGrid.dataset.loaded !== 'true'
+    ) {
       renderVideoCards();
     }
   }
 
-  // Fetch news from the existing backend
+  // ==========================================
+  // 10. LOAD NEWS FROM BACKEND
+  // ==========================================
+
   async function loadNews() {
     const city = locationInput.value.trim();
 
     if (!city) {
-      statusEl.textContent = 'Please enter a city or location.';
+      statusEl.textContent =
+        'Please enter a city or location.';
+
       locationInput.focus();
       return;
     }
 
     resultsTitle.textContent = `Today in ${city}`;
-    statusEl.textContent = `Searching for news about ${city}...`;
+
+    statusEl.textContent =
+      `Searching for news about ${city}...`;
+
     resultCount.textContent = 'Loading...';
     searchBtn.disabled = true;
+
+    // Show the news tab while loading results
+    showTab('posts');
 
     showEmpty(
       'Finding your daily briefing',
@@ -268,23 +334,25 @@
         data = await response.json();
       } catch {
         throw new Error(
-          'The server returned an invalid response. Please check the backend.'
+          'The server returned an invalid response.'
         );
       }
 
       if (!response.ok || data.error) {
         throw new Error(
-          data.error || `News request failed (${response.status}).`
+          data.error ||
+          `News request failed (${response.status}).`
         );
       }
 
       const articles = Array.isArray(data.articles)
-        ? data.articles.filter(
-            (article) =>
+        ? data.articles.filter((article) => {
+            return (
               article &&
               article.title &&
               article.title !== '[Removed]'
-          )
+            );
+          })
         : [];
 
       renderArticles(articles);
@@ -294,27 +362,41 @@
           articles.length === 1 ? 'story' : 'stories'
         }`;
 
-      statusEl.textContent = articles.length
-        ? `Showing news articles for ${city}.`
-        : `No articles found for ${city}. Try another location.`;
+      if (articles.length > 0) {
+        statusEl.textContent =
+          `Showing news articles for ${city}.`;
+      } else {
+        statusEl.textContent =
+          `No articles found for ${city}. Try another location.`;
+      }
 
     } catch (error) {
-      showEmpty(
-        'Could not load news',
-        error.message || 'Please check your internet connection.'
+      console.error(
+        'DailyScope news error:',
+        error
       );
 
-      statusEl.textContent = 'News request failed.';
-      resultCount.textContent = 'Unavailable';
+      showEmpty(
+        'Could not load news',
+        error.message ||
+        'Please check your internet connection and backend.'
+      );
 
-      console.error('DailyScope news error:', error);
+      statusEl.textContent =
+        'News request failed.';
+
+      resultCount.textContent =
+        'Unavailable';
 
     } finally {
       searchBtn.disabled = false;
     }
   }
 
-  // Button events
+  // ==========================================
+  // 11. BUTTON EVENTS
+  // ==========================================
+
   searchBtn.addEventListener('click', loadNews);
 
   locationInput.addEventListener('keydown', (event) => {
@@ -323,11 +405,21 @@
     }
   });
 
-  postsTab.addEventListener('click', () => showTab('posts'));
-  videosTab.addEventListener('click', () => showTab('videos'));
+  postsTab.addEventListener('click', () => {
+    showTab('posts');
+  });
 
-  // Start with News Posts visible
+  videosTab.addEventListener('click', () => {
+    showTab('videos');
+  });
+
+  // ==========================================
+  // 12. INITIAL PAGE SETUP
+  // ==========================================
+
   showTab('posts');
+
+  console.log('DailyScope JavaScript loaded successfully.');
 
 })();
 ```
