@@ -219,3 +219,49 @@ footer{border-top:1px solid var(--line);background:#fff}
 .small-brand{font-size:16px;color:var(--navy);letter-spacing:-.4px}.small-brand .brand-mark{width:25px;height:25px;font-size:14px;background:var(--navy);color:#fff;border-radius:8px}.small-brand>span:last-child{color:var(--blue);margin-left:-9px}
 @media(max-width:850px){.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.news-image{height:180px}}
 @media(max-width:580px){.site-header{padding:0 17px 60px}.header-inner{height:70px}.header-note{font-size:9px;letter-spacing:1px}.brand{font-size:19px}.hero{padding-top:43px}.hero h1{letter-spacing:-1.2px}.hero-copy{font-size:14px}.container{padding:0 14px}.search-panel{padding:17px}.search-row{flex-direction:column}.search-row button{width:100%}.results-heading{align-items:start;flex-direction:column;margin-top:30px}.results-heading h2{font-size:26px}.news-grid{grid-template-columns:1fr}.news-image{height:210px}.footer-inner{padding:18px 15px;gap:12px;flex-wrap:wrap}}
+/* DailyScope professional branding */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.brand-logo {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-name {
+  color: #ffffff;
+}
+
+.brand-name span {
+  color: #16c8ff;
+}
+
+.small-brand {
+  font-size: 20px;
+}
+
+.small-brand .brand-logo {
+  width: 42px;
+  height: 42px;
+}
+
+@media (max-width: 480px) {
+  .brand {
+    gap: 8px;
+    font-size: 21px;
+  }
+
+  .brand-logo {
+    width: 46px;
+    height: 46px;
+  }
+}
