@@ -265,3 +265,46 @@ footer{border-top:1px solid var(--line);background:#fff}
     height: 46px;
   }
 }
+
+/* DailyScope brand logo */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00d4ff, #2456e8);
+  color: #ffffff;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.brand-name {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.brand-name span {
+  color: #08c8ff;
+}
+
+#location {
+  background: #ffffff;
+  color: #102044;
+}
+
+#location::placeholder {
+  color: transparent;
+}
+
